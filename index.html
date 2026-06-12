@@ -1,0 +1,1599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ram Sir</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+  :root {
+    --bg: #0a0a12;
+    --bg2: #0e0e1a;
+    --bg3: #13132000;
+    --card: #141422;
+    --card2: #1a1a2e;
+    --border: #252540;
+    --accent: #6c63ff;
+    --accent2: #00d4ff;
+    --accent3: #ff6b9d;
+    --accent4: #ffd700;
+    --text: #e8e8f0;
+    --text2: #a0a0c0;
+    --text3: #606080;
+    --green: #00ff88;
+    --orange: #ff8c42;
+    --mono: 'JetBrains Mono', monospace;
+    --sans: 'Space Grotesk', sans-serif;
+    --body: 'Inter', sans-serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--body);
+    overflow-x: hidden;
+    line-height: 1.6;
+  }
+
+  /* ─── BACKGROUND CANVAS ─── */
+  #bg-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    background: rgba(10,10,18,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 5%;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 65px;
+    transition: all 0.3s;
+  }
+  .nav-logo {
+    font-family: var(--sans); font-weight: 700; font-size: 1.3rem;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .nav-logo i { -webkit-text-fill-color: var(--accent); font-size: 1.1rem; }
+  .nav-links { display: flex; gap: 28px; list-style: none; }
+  .nav-links a {
+    color: var(--text2); text-decoration: none; font-size: 0.9rem;
+    font-weight: 500; transition: color 0.3s; position: relative;
+  }
+  .nav-links a::after {
+    content: ''; position: absolute; bottom: -3px; left: 0; width: 0; height: 2px;
+    background: var(--accent); transition: width 0.3s;
+  }
+  .nav-links a:hover { color: var(--text); }
+  .nav-links a:hover::after { width: 100%; }
+  .nav-cta {
+    background: linear-gradient(135deg, var(--accent), #9c95ff);
+    color: #fff !important; padding: 8px 20px; border-radius: 50px;
+    font-size: 0.85rem !important;
+  }
+  .nav-cta::after { display: none !important; }
+  .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 5px; }
+  .hamburger span { display: block; width: 24px; height: 2px; background: var(--text); border-radius: 2px; transition: 0.3s; }
+  .mobile-menu {
+    display: none; position: fixed; top: 65px; left: 0; right: 0;
+    background: rgba(10,10,18,0.98); backdrop-filter: blur(20px);
+    padding: 20px 5%; z-index: 999; border-bottom: 1px solid var(--border);
+    flex-direction: column; gap: 16px;
+  }
+  .mobile-menu.open { display: flex; }
+  .mobile-menu a { color: var(--text2); text-decoration: none; font-size: 1rem; padding: 8px 0; border-bottom: 1px solid var(--border); }
+
+  /* ─── SECTIONS BASE ─── */
+  section { position: relative; z-index: 1; }
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 5%; }
+  .section-label {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(108,99,255,0.1); border: 1px solid rgba(108,99,255,0.3);
+    color: var(--accent); font-size: 0.8rem; font-weight: 600;
+    padding: 6px 16px; border-radius: 50px; letter-spacing: 0.1em;
+    text-transform: uppercase; margin-bottom: 20px;
+  }
+  .section-title {
+    font-family: var(--sans); font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 700; line-height: 1.15; margin-bottom: 16px;
+  }
+  .section-sub { color: var(--text2); font-size: 1.05rem; max-width: 620px; }
+  .highlight { background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+  /* ─── HERO ─── */
+  #hero {
+    min-height: 100vh; display: flex; align-items: center;
+    padding: 100px 5% 60px;
+    background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(108,99,255,0.12) 0%, transparent 70%);
+  }
+  .hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; max-width: 1200px; margin: 0 auto; width: 100%; }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(0,212,255,0.08); border: 1px solid rgba(0,212,255,0.25);
+    color: var(--accent2); font-size: 0.8rem; font-weight: 600;
+    padding: 6px 16px; border-radius: 50px; letter-spacing: 0.08em;
+    margin-bottom: 24px; animation: pulse-border 2s infinite;
+  }
+  @keyframes pulse-border {
+    0%, 100% { border-color: rgba(0,212,255,0.25); }
+    50% { border-color: rgba(0,212,255,0.7); }
+  }
+  .hero-title {
+    font-family: var(--sans); font-size: clamp(2.5rem, 6vw, 4rem);
+    font-weight: 700; line-height: 1.1; margin-bottom: 24px;
+  }
+  .hero-title .word-api {
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 50%, var(--accent3) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    font-size: 1.2em;
+  }
+  .hero-desc { color: var(--text2); font-size: 1.1rem; margin-bottom: 36px; max-width: 500px; }
+  .hero-btns { display: flex; gap: 16px; flex-wrap: wrap; }
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: linear-gradient(135deg, var(--accent), #9c95ff);
+    color: #fff; padding: 14px 28px; border-radius: 50px;
+    text-decoration: none; font-weight: 600; font-size: 0.95rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 8px 30px rgba(108,99,255,0.35);
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(108,99,255,0.5); }
+  .btn-secondary {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: transparent; border: 1px solid var(--border);
+    color: var(--text); padding: 14px 28px; border-radius: 50px;
+    text-decoration: none; font-weight: 600; font-size: 0.95rem;
+    transition: all 0.2s;
+  }
+  .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+  .hero-stats { display: flex; gap: 36px; margin-top: 48px; }
+  .stat-item { text-align: center; }
+  .stat-num { font-family: var(--sans); font-size: 2rem; font-weight: 700; color: var(--accent); }
+  .stat-label { font-size: 0.8rem; color: var(--text3); text-transform: uppercase; letter-spacing: 0.08em; }
+  .hero-visual {
+    position: relative; display: flex; align-items: center; justify-content: center;
+  }
+  .api-diagram {
+    width: 100%; max-width: 460px; aspect-ratio: 1;
+    position: relative;
+  }
+  .api-center {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100px; height: 100px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--sans); font-weight: 700; font-size: 1.1rem;
+    color: #fff; z-index: 5;
+    box-shadow: 0 0 40px rgba(108,99,255,0.6);
+    animation: center-pulse 3s ease-in-out infinite;
+  }
+  @keyframes center-pulse {
+    0%, 100% { box-shadow: 0 0 40px rgba(108,99,255,0.6); transform: translate(-50%,-50%) scale(1); }
+    50% { box-shadow: 0 0 70px rgba(108,99,255,0.9); transform: translate(-50%,-50%) scale(1.05); }
+  }
+  .orbit {
+    position: absolute; top: 50%; left: 50%;
+    border: 1px dashed rgba(108,99,255,0.2);
+    border-radius: 50%;
+    transform: translate(-50%,-50%);
+  }
+  .orbit-1 { width: 200px; height: 200px; animation: orbit-rotate 12s linear infinite; }
+  .orbit-2 { width: 310px; height: 310px; animation: orbit-rotate 20s linear infinite reverse; }
+  .orbit-3 { width: 410px; height: 410px; animation: orbit-rotate 30s linear infinite; }
+  @keyframes orbit-rotate { from { transform: translate(-50%,-50%) rotate(0deg); } to { transform: translate(-50%,-50%) rotate(360deg); } }
+  .orbit-node {
+    position: absolute; width: 48px; height: 48px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.2rem; font-weight: 700;
+    border: 1px solid var(--border);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+  }
+  .n1 { background: #1e1e3a; color: #00d4ff; top: -24px; left: 50%; margin-left: -24px; }
+  .n2 { background: #1e2e1e; color: #00ff88; bottom: -24px; left: 50%; margin-left: -24px; }
+  .n3 { background: #2e1e2e; color: #ff6b9d; top: 50%; margin-top: -24px; left: -24px; }
+  .n4 { background: #2e2e1e; color: #ffd700; top: 50%; margin-top: -24px; right: -24px; }
+  .n5 { background: #1e2e2e; color: #ff8c42; top: -24px; left: 50%; margin-left: -24px; }
+  .n6 { background: #2a1e2e; color: #c77dff; bottom: -24px; left: 50%; margin-left: -24px; }
+  .n7 { background: #1e2a1e; color: #80ed99; top: 50%; margin-top: -24px; left: -24px; }
+  .n8 { background: #2e2a1e; color: #ffd166; top: 50%; margin-top: -24px; right: -24px; }
+  .orbit-1 .orbit-node { counter-reset: none; }
+
+  /* ─── WHAT IS API ─── */
+  #what { padding: 100px 0; }
+  .what-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+  .what-text p { color: var(--text2); margin-bottom: 20px; font-size: 1.05rem; }
+  .analogy-card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 16px;
+    padding: 28px; margin-top: 28px; position: relative; overflow: hidden;
+  }
+  .analogy-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+  }
+  .analogy-card .icon { font-size: 2rem; margin-bottom: 12px; }
+  .analogy-card h4 { font-family: var(--sans); font-size: 1rem; font-weight: 600; margin-bottom: 8px; }
+  .analogy-card p { color: var(--text2); font-size: 0.9rem; margin: 0; }
+  .terminal-window {
+    background: #0d0d1a; border: 1px solid var(--border); border-radius: 12px;
+    overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  }
+  .terminal-bar {
+    background: #1a1a2e; padding: 12px 16px; display: flex; align-items: center; gap: 8px;
+  }
+  .dot { width: 12px; height: 12px; border-radius: 50%; }
+  .dot.r { background: #ff5f57; }
+  .dot.y { background: #ffbd2e; }
+  .dot.g { background: #28c840; }
+  .terminal-bar span { color: var(--text3); font-size: 0.75rem; margin-left: auto; font-family: var(--mono); }
+  .terminal-body { padding: 24px; font-family: var(--mono); font-size: 0.82rem; line-height: 1.8; }
+  .t-comment { color: #4a4a8a; }
+  .t-key { color: var(--accent2); }
+  .t-val { color: var(--green); }
+  .t-str { color: var(--accent3); }
+  .t-num { color: var(--accent4); }
+  .t-url { color: var(--orange); }
+  .t-method { color: #ff6b6b; font-weight: 600; }
+  .t-status { color: var(--green); font-weight: 600; }
+  .t-gray { color: var(--text3); }
+
+  /* ─── WHY API ─── */
+  #why { padding: 100px 0; background: linear-gradient(180deg, transparent, rgba(108,99,255,0.03), transparent); }
+  .why-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px; margin-top: 60px; }
+  .why-card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 16px;
+    padding: 28px; transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+    cursor: default;
+  }
+  .why-card:hover { transform: translateY(-6px); box-shadow: 0 20px 50px rgba(0,0,0,0.3); border-color: var(--accent); }
+  .why-card .icon-box {
+    width: 52px; height: 52px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.4rem; margin-bottom: 18px;
+  }
+  .why-card h3 { font-family: var(--sans); font-size: 1.05rem; font-weight: 600; margin-bottom: 10px; }
+  .why-card p { color: var(--text2); font-size: 0.88rem; line-height: 1.65; }
+
+  /* ─── TYPES ─── */
+  #types { padding: 100px 0; }
+  .types-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin: 48px 0 40px; }
+  .tab-btn {
+    padding: 10px 22px; border-radius: 50px; border: 1px solid var(--border);
+    background: transparent; color: var(--text2); font-size: 0.9rem; font-weight: 500;
+    cursor: pointer; transition: all 0.2s; font-family: var(--body);
+  }
+  .tab-btn.active, .tab-btn:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; animation: fade-in 0.4s ease; }
+  @keyframes fade-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  .type-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start; }
+  .type-info h3 { font-family: var(--sans); font-size: 1.6rem; font-weight: 700; margin-bottom: 12px; }
+  .type-info p { color: var(--text2); margin-bottom: 20px; }
+  .type-info ul { list-style: none; }
+  .type-info ul li {
+    color: var(--text2); font-size: 0.9rem; padding: 8px 0;
+    border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px;
+  }
+  .type-info ul li i { color: var(--green); font-size: 0.75rem; }
+  .type-badge {
+    display: inline-block; padding: 4px 12px; border-radius: 50px;
+    font-size: 0.75rem; font-weight: 600; letter-spacing: 0.05em;
+    margin-bottom: 16px;
+  }
+
+  /* ─── CODE EXAMPLES ─── */
+  #examples { padding: 100px 0; background: linear-gradient(180deg, transparent, rgba(0,212,255,0.02), transparent); }
+  .examples-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(520px, 1fr)); gap: 32px; margin-top: 60px; }
+  .code-card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 16px; overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  .code-card:hover { transform: translateY(-4px); box-shadow: 0 20px 50px rgba(0,0,0,0.4); }
+  .code-card-header {
+    background: var(--card2); padding: 16px 20px; display: flex; align-items: center;
+    justify-content: space-between; border-bottom: 1px solid var(--border);
+  }
+  .code-card-header .title { font-family: var(--sans); font-weight: 600; font-size: 0.95rem; display: flex; align-items: center; gap: 10px; }
+  .code-card-header .lang-badge {
+    padding: 3px 10px; border-radius: 4px; font-size: 0.7rem; font-weight: 600;
+    font-family: var(--mono); letter-spacing: 0.05em;
+  }
+  .copy-btn {
+    background: rgba(108,99,255,0.1); border: 1px solid rgba(108,99,255,0.3);
+    color: var(--accent); padding: 5px 12px; border-radius: 6px; font-size: 0.75rem;
+    cursor: pointer; transition: all 0.2s; font-family: var(--body);
+  }
+  .copy-btn:hover { background: rgba(108,99,255,0.25); }
+  .code-block {
+    padding: 20px; font-family: var(--mono); font-size: 0.78rem; line-height: 1.75;
+    overflow-x: auto; max-height: 340px; overflow-y: auto;
+    background: #09090f;
+  }
+  .code-block::-webkit-scrollbar { width: 4px; height: 4px; }
+  .code-block::-webkit-scrollbar-track { background: transparent; }
+  .code-block::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+  .kw { color: #ff79c6; }
+  .fn { color: #50fa7b; }
+  .str { color: #f1fa8c; }
+  .cm { color: #6272a4; }
+  .var { color: #8be9fd; }
+  .num { color: #bd93f9; }
+  .cl { color: #ffb86c; }
+  .op { color: #ff79c6; }
+
+  /* ─── REAL WORLD ─── */
+  #realworld { padding: 100px 0; }
+  .rw-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 24px; margin-top: 60px; }
+  .rw-card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 16px;
+    padding: 28px 24px; text-align: center; transition: all 0.3s;
+    position: relative; overflow: hidden;
+  }
+  .rw-card::before {
+    content: ''; position: absolute; inset: 0; opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .rw-card:hover::before { opacity: 1; }
+  .rw-card:hover { transform: translateY(-6px); }
+  .rw-icon { font-size: 2.5rem; margin-bottom: 16px; display: block; }
+  .rw-card h3 { font-family: var(--sans); font-size: 1rem; font-weight: 600; margin-bottom: 8px; }
+  .rw-card p { color: var(--text2); font-size: 0.82rem; line-height: 1.6; }
+  .rw-card .rw-example { margin-top: 12px; font-size: 0.75rem; color: var(--accent2); font-family: var(--mono); }
+
+  /* ─── QA ─── */
+  #qa { padding: 100px 0; background: linear-gradient(180deg, transparent, rgba(108,99,255,0.03), transparent); }
+  .qa-filter { display: flex; gap: 8px; flex-wrap: wrap; margin: 40px 0 32px; }
+  .filter-btn {
+    padding: 8px 18px; border-radius: 50px; border: 1px solid var(--border);
+    background: transparent; color: var(--text2); font-size: 0.82rem;
+    cursor: pointer; transition: all 0.2s; font-family: var(--body);
+  }
+  .filter-btn.active, .filter-btn:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .qa-list { display: flex; flex-direction: column; gap: 12px; }
+  .qa-item {
+    background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+    overflow: hidden; transition: border-color 0.3s;
+  }
+  .qa-item.open { border-color: rgba(108,99,255,0.4); }
+  .qa-q {
+    padding: 20px 24px; display: flex; align-items: center; justify-content: space-between;
+    cursor: pointer; gap: 16px;
+  }
+  .qa-num { color: var(--accent); font-family: var(--mono); font-size: 0.8rem; font-weight: 600; flex-shrink: 0; }
+  .qa-q-text { font-weight: 500; font-size: 0.95rem; flex: 1; }
+  .qa-diff {
+    padding: 3px 10px; border-radius: 50px; font-size: 0.7rem; font-weight: 600;
+    flex-shrink: 0;
+  }
+  .diff-easy { background: rgba(0,255,136,0.1); color: var(--green); border: 1px solid rgba(0,255,136,0.2); }
+  .diff-med { background: rgba(255,212,0,0.1); color: var(--accent4); border: 1px solid rgba(255,212,0,0.2); }
+  .diff-hard { background: rgba(255,107,157,0.1); color: var(--accent3); border: 1px solid rgba(255,107,157,0.2); }
+  .qa-toggle { color: var(--text3); transition: transform 0.3s; flex-shrink: 0; }
+  .qa-item.open .qa-toggle { transform: rotate(45deg); color: var(--accent); }
+  .qa-a { display: none; padding: 0 24px 20px; color: var(--text2); font-size: 0.9rem; line-height: 1.75; border-top: 1px solid var(--border); padding-top: 16px; }
+  .qa-item.open .qa-a { display: block; animation: fade-in 0.3s ease; }
+
+  /* ─── TRAINER ─── */
+  #trainer { padding: 100px 0; }
+  .trainer-card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 24px;
+    padding: 56px; max-width: 900px; margin: 60px auto 0;
+    display: grid; grid-template-columns: auto 1fr; gap: 48px; align-items: center;
+    position: relative; overflow: hidden;
+  }
+  .trainer-card::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 0% 0%, rgba(108,99,255,0.08) 0%, transparent 60%);
+  }
+  .trainer-avatar {
+    width: 140px; height: 140px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--sans); font-size: 3rem; font-weight: 700; color: #fff;
+    flex-shrink: 0; position: relative; z-index: 1;
+    box-shadow: 0 0 40px rgba(108,99,255,0.4);
+  }
+  .trainer-info { position: relative; z-index: 1; }
+  .trainer-info h2 { font-family: var(--sans); font-size: 1.8rem; font-weight: 700; margin-bottom: 6px; }
+  .trainer-info .role { color: var(--accent2); font-size: 1rem; font-weight: 500; margin-bottom: 16px; }
+  .trainer-info p { color: var(--text2); font-size: 0.95rem; line-height: 1.7; margin-bottom: 24px; }
+  .trainer-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 28px; }
+  .trainer-tag {
+    background: rgba(108,99,255,0.1); border: 1px solid rgba(108,99,255,0.25);
+    color: var(--accent); padding: 5px 14px; border-radius: 50px; font-size: 0.8rem; font-weight: 500;
+  }
+  .trainer-social { display: flex; gap: 12px; }
+  .social-btn {
+    width: 40px; height: 40px; border-radius: 10px; border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--text2); text-decoration: none; font-size: 1rem;
+    transition: all 0.2s;
+  }
+  .social-btn:hover { border-color: var(--accent); color: var(--accent); background: rgba(108,99,255,0.1); }
+
+  /* ─── CONTACT ─── */
+  #contact { padding: 100px 0; background: linear-gradient(180deg, transparent, rgba(0,212,255,0.03), transparent); }
+  .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: start; margin-top: 60px; }
+  .contact-info h3 { font-family: var(--sans); font-size: 1.4rem; font-weight: 600; margin-bottom: 16px; }
+  .contact-info p { color: var(--text2); margin-bottom: 32px; font-size: 0.95rem; line-height: 1.75; }
+  .contact-methods { display: flex; flex-direction: column; gap: 16px; }
+  .contact-method {
+    display: flex; align-items: center; gap: 16px;
+    background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+    padding: 16px 20px; text-decoration: none; color: var(--text);
+    transition: all 0.2s;
+  }
+  .contact-method:hover { border-color: var(--accent); transform: translateX(4px); }
+  .contact-method .cm-icon {
+    width: 44px; height: 44px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0;
+  }
+  .contact-method .cm-text h4 { font-size: 0.9rem; font-weight: 600; }
+  .contact-method .cm-text p { color: var(--text2); font-size: 0.82rem; margin: 0; }
+  .contact-form { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 36px; }
+  .contact-form h3 { font-family: var(--sans); font-size: 1.2rem; font-weight: 600; margin-bottom: 24px; }
+  .form-group { margin-bottom: 20px; }
+  .form-group label { display: block; font-size: 0.85rem; font-weight: 500; margin-bottom: 8px; color: var(--text2); }
+  .form-group input, .form-group textarea, .form-group select {
+    width: 100%; background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 10px; padding: 12px 16px; color: var(--text);
+    font-family: var(--body); font-size: 0.9rem; transition: border-color 0.2s;
+    outline: none;
+  }
+  .form-group input:focus, .form-group textarea:focus, .form-group select:focus { border-color: var(--accent); }
+  .form-group textarea { resize: vertical; min-height: 100px; }
+  .form-group select option { background: var(--bg2); }
+  .form-submit {
+    width: 100%; padding: 14px; border-radius: 10px; border: none;
+    background: linear-gradient(135deg, var(--accent), #9c95ff);
+    color: #fff; font-size: 0.95rem; font-weight: 600; cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s; font-family: var(--body);
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+  }
+  .form-submit:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(108,99,255,0.4); }
+  .whatsapp-cta {
+    background: linear-gradient(135deg, #25d366, #128c7e); border: none;
+    width: 100%; padding: 14px; border-radius: 10px;
+    color: #fff; font-size: 0.95rem; font-weight: 600; cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s; font-family: var(--body);
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    margin-top: 12px; text-decoration: none;
+  }
+  .whatsapp-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(37,211,102,0.4); }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: var(--card); border-top: 1px solid var(--border);
+    padding: 60px 5% 30px; position: relative; z-index: 1;
+  }
+  .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; max-width: 1200px; margin: 0 auto; }
+  .footer-brand .logo { font-family: var(--sans); font-weight: 700; font-size: 1.4rem; background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .footer-brand p { color: var(--text3); font-size: 0.88rem; line-height: 1.7; max-width: 280px; }
+  .footer-col h4 { font-family: var(--sans); font-weight: 600; font-size: 0.95rem; margin-bottom: 18px; }
+  .footer-col ul { list-style: none; }
+  .footer-col ul li { margin-bottom: 10px; }
+  .footer-col ul li a { color: var(--text3); text-decoration: none; font-size: 0.88rem; transition: color 0.2s; }
+  .footer-col ul li a:hover { color: var(--text); }
+  .footer-bottom { max-width: 1200px; margin: 40px auto 0; padding-top: 24px; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+  .footer-bottom p { color: var(--text3); font-size: 0.82rem; }
+
+  /* ─── SCROLL PROGRESS ─── */
+  #scroll-progress {
+    position: fixed; top: 0; left: 0; height: 3px; z-index: 2000;
+    background: linear-gradient(90deg, var(--accent), var(--accent2), var(--accent3));
+    width: 0%; transition: width 0.1s;
+  }
+
+  /* ─── SCROLL REVEAL ─── */
+  .reveal {
+    opacity: 0; transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* ─── TOAST ─── */
+  .toast {
+    position: fixed; bottom: 24px; right: 24px; z-index: 9999;
+    background: var(--card2); border: 1px solid var(--green); border-radius: 12px;
+    padding: 14px 20px; color: var(--text); font-size: 0.9rem;
+    display: flex; align-items: center; gap: 10px;
+    transform: translateY(100px); opacity: 0; transition: all 0.3s;
+    pointer-events: none;
+  }
+  .toast.show { transform: translateY(0); opacity: 1; }
+  .toast i { color: var(--green); }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 900px) {
+    .hero-grid { grid-template-columns: 1fr; }
+    .hero-visual { display: none; }
+    .what-grid { grid-template-columns: 1fr; }
+    .type-layout { grid-template-columns: 1fr; }
+    .trainer-card { grid-template-columns: 1fr; text-align: center; padding: 36px 28px; }
+    .trainer-avatar { margin: 0 auto; }
+    .trainer-social { justify-content: center; }
+    .trainer-tags { justify-content: center; }
+    .contact-grid { grid-template-columns: 1fr; }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+    .examples-grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 600px) {
+    .nav-links { display: none; }
+    .hamburger { display: flex; }
+    .hero-stats { gap: 20px; }
+    .stat-num { font-size: 1.5rem; }
+    .footer-grid { grid-template-columns: 1fr; }
+    .footer-bottom { flex-direction: column; gap: 10px; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<div id="scroll-progress"></div>
+<canvas id="bg-canvas"></canvas>
+
+<!-- NAV -->
+<nav id="navbar">
+  <div class="nav-logo"><i class="fas fa-plug-circle-bolt"></i> API Masterclass</div>
+  <ul class="nav-links">
+    <li><a href="#what">What is API</a></li>
+    <li><a href="#types">Types</a></li>
+    <li><a href="#examples">Examples</a></li>
+    <li><a href="#qa">Interview Q&A</a></li>
+    <li><a href="#trainer">Trainer</a></li>
+    <li><a href="#contact" class="nav-cta">Contact</a></li>
+  </ul>
+  <div class="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobile-menu">
+  <a href="#what" onclick="toggleMenu()">What is API</a>
+  <a href="#types" onclick="toggleMenu()">Types</a>
+  <a href="#examples" onclick="toggleMenu()">Code Examples</a>
+  <a href="#qa" onclick="toggleMenu()">Interview Q&A</a>
+  <a href="#trainer" onclick="toggleMenu()">Trainer</a>
+  <a href="#contact" onclick="toggleMenu()">Contact</a>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-grid">
+    <div class="hero-left">
+      <div class="hero-badge reveal"><i class="fas fa-satellite-dish"></i> &nbsp;Complete API Guide 2024</div>
+      <h1 class="hero-title reveal">
+        Master the World of <span class="word-api">APIs</span><br>from Zero to Pro
+      </h1>
+      <p class="hero-desc reveal">REST, GraphQL, Flask, FastAPI, WebSocket & more — with real code, real use cases, and 30+ interview questions.</p>
+      <div class="hero-btns reveal">
+        <a href="#what" class="btn-primary"><i class="fas fa-play"></i> Start Learning</a>
+        <a href="#qa" class="btn-secondary"><i class="fas fa-question-circle"></i> Interview Prep</a>
+      </div>
+      <div class="hero-stats reveal">
+        <div class="stat-item"><div class="stat-num">7+</div><div class="stat-label">API Types</div></div>
+        <div class="stat-item"><div class="stat-num">30+</div><div class="stat-label">Q&A</div></div>
+        <div class="stat-item"><div class="stat-num">10+</div><div class="stat-label">Code Examples</div></div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="api-diagram">
+        <div class="orbit orbit-3">
+          <div class="orbit-node n5"><i class="fab fa-python"></i></div>
+          <div class="orbit-node n6"><i class="fas fa-mobile-alt"></i></div>
+          <div class="orbit-node n7"><i class="fas fa-database"></i></div>
+          <div class="orbit-node n8"><i class="fas fa-cloud"></i></div>
+        </div>
+        <div class="orbit orbit-2">
+          <div class="orbit-node n3"><i class="fas fa-globe"></i></div>
+          <div class="orbit-node n4"><i class="fas fa-server"></i></div>
+        </div>
+        <div class="orbit orbit-1">
+          <div class="orbit-node n1"><i class="fas fa-desktop"></i></div>
+          <div class="orbit-node n2"><i class="fas fa-robot"></i></div>
+        </div>
+        <div class="api-center">API</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT IS API -->
+<section id="what">
+  <div class="container">
+    <div class="what-grid">
+      <div class="what-text">
+        <div class="section-label reveal"><i class="fas fa-info-circle"></i> Introduction</div>
+        <h2 class="section-title reveal">What is an <span class="highlight">API?</span></h2>
+        <p class="reveal">API stands for <strong>Application Programming Interface</strong>. It is a set of rules and protocols that allows two software applications to communicate with each other.</p>
+        <p class="reveal">Think of an API as a <strong>contract</strong> between two systems. It defines what requests can be made, how to make them, and what responses to expect — without revealing the internal implementation.</p>
+        <div class="analogy-card reveal">
+          <div class="icon">🍽️</div>
+          <h4>The Restaurant Analogy</h4>
+          <p>You (client) sit at a table. The menu (API documentation) shows what's available. You give your order to the waiter (API). The waiter takes it to the kitchen (server). The kitchen prepares the food and the waiter brings it back. You never enter the kitchen — that's the abstraction!</p>
+        </div>
+        <div class="analogy-card reveal">
+          <div class="icon">🔌</div>
+          <h4>The Power Socket Analogy</h4>
+          <p>A power socket is an API. You don't need to know how electricity is generated — you just plug in your device. The socket defines the interface (shape, voltage), and anything that fits can use it.</p>
+        </div>
+      </div>
+      <div class="what-code reveal">
+        <div class="terminal-window">
+          <div class="terminal-bar">
+            <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
+            <span>api_request.http</span>
+          </div>
+          <div class="terminal-body">
+<span class="t-comment">### CLIENT sends a REQUEST to API</span>
+<span class="t-method">GET</span> <span class="t-url">https://api.weather.com/v1/current</span>
+<span class="t-key">Host:</span> <span class="t-val">api.weather.com</span>
+<span class="t-key">Authorization:</span> <span class="t-str">Bearer YOUR_API_KEY</span>
+<span class="t-key">Accept:</span> <span class="t-val">application/json</span>
+
+<span class="t-comment">--- SERVER sends a RESPONSE ---</span>
+<span class="t-status">HTTP/1.1 200 OK</span>
+<span class="t-key">Content-Type:</span> <span class="t-val">application/json</span>
+
+{
+  <span class="t-key">"city":</span> <span class="t-str">"Indore"</span>,
+  <span class="t-key">"temp":</span> <span class="t-num">32</span>,
+  <span class="t-key">"unit":</span> <span class="t-str">"Celsius"</span>,
+  <span class="t-key">"condition":</span> <span class="t-str">"Sunny"</span>,
+  <span class="t-key">"humidity":</span> <span class="t-num">65</span>,
+  <span class="t-key">"status":</span> <span class="t-str">"success"</span>
+}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY API -->
+<section id="why">
+  <div class="container">
+    <div class="section-label reveal"><i class="fas fa-question-circle"></i> Importance</div>
+    <h2 class="section-title reveal">Why APIs are <span class="highlight">Important?</span></h2>
+    <p class="section-sub reveal">APIs are the backbone of modern software development. Here's why every developer needs to understand them.</p>
+    <div class="why-grid">
+      <div class="why-card reveal">
+        <div class="icon-box" style="background:rgba(108,99,255,0.12)"><i class="fas fa-puzzle-piece" style="color:var(--accent)"></i></div>
+        <h3>Modularity & Reusability</h3>
+        <p>Build once, use everywhere. A payment API like Razorpay can be integrated into thousands of apps without rebuilding payment logic each time.</p>
+      </div>
+      <div class="why-card reveal">
+        <div class="icon-box" style="background:rgba(0,212,255,0.1)"><i class="fas fa-shield-alt" style="color:var(--accent2)"></i></div>
+        <h3>Security & Abstraction</h3>
+        <p>APIs hide sensitive internal logic. External systems interact only through defined endpoints, protecting your database and business logic.</p>
+      </div>
+      <div class="why-card reveal">
+        <div class="icon-box" style="background:rgba(0,255,136,0.1)"><i class="fas fa-bolt" style="color:var(--green)"></i></div>
+        <h3>Speed of Development</h3>
+        <p>Use Google Maps API instead of building mapping from scratch. Developers save months of work by consuming existing APIs.</p>
+      </div>
+      <div class="why-card reveal">
+        <div class="icon-box" style="background:rgba(255,107,157,0.1)"><i class="fas fa-expand-arrows-alt" style="color:var(--accent3)"></i></div>
+        <h3>Scalability</h3>
+        <p>Microservices communicate via APIs. Each service can scale independently, making large applications more manageable and resilient.</p>
+      </div>
+      <div class="why-card reveal">
+        <div class="icon-box" style="background:rgba(255,212,0,0.1)"><i class="fas fa-handshake" style="color:var(--accent4)"></i></div>
+        <h3>Integration & Ecosystem</h3>
+        <p>Connect Slack with GitHub, Jira with Trello, or CRM with ERP. APIs make third-party integrations seamless and powerful.</p>
+      </div>
+      <div class="why-card reveal">
+        <div class="icon-box" style="background:rgba(255,140,66,0.1)"><i class="fas fa-code-branch" style="color:var(--orange)"></i></div>
+        <h3>Platform Independence</h3>
+        <p>A single REST API can serve web, Android, iOS, and IoT devices simultaneously without any code changes on the backend.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TYPES OF API -->
+<section id="types">
+  <div class="container">
+    <div class="section-label reveal"><i class="fas fa-layer-group"></i> API Types</div>
+    <h2 class="section-title reveal">Types of <span class="highlight">APIs</span></h2>
+    <p class="section-sub reveal">APIs come in many flavors — understanding each type helps you choose the right tool for the right job.</p>
+    <div class="types-tabs reveal">
+      <button class="tab-btn active" onclick="switchTab('rest')">REST</button>
+      <button class="tab-btn" onclick="switchTab('graphql')">GraphQL</button>
+      <button class="tab-btn" onclick="switchTab('soap')">SOAP</button>
+      <button class="tab-btn" onclick="switchTab('grpc')">gRPC</button>
+      <button class="tab-btn" onclick="switchTab('websocket')">WebSocket</button>
+      <button class="tab-btn" onclick="switchTab('flask')">Flask API</button>
+      <button class="tab-btn" onclick="switchTab('fastapi')">FastAPI</button>
+      <button class="tab-btn" onclick="switchTab('openapi')">OpenAPI</button>
+    </div>
+
+    <div id="tab-rest" class="tab-content active">
+      <div class="type-layout">
+        <div class="type-info">
+          <span class="type-badge" style="background:rgba(108,99,255,0.15);color:var(--accent);border:1px solid rgba(108,99,255,0.3)">Most Popular</span>
+          <h3>REST API</h3>
+          <p>REST (Representational State Transfer) is an architectural style for building APIs over HTTP. It's stateless, uses standard HTTP methods, and returns data in JSON or XML.</p>
+          <ul>
+            <li><i class="fas fa-circle"></i> Uses HTTP methods: GET, POST, PUT, DELETE, PATCH</li>
+            <li><i class="fas fa-circle"></i> Stateless — each request is independent</li>
+            <li><i class="fas fa-circle"></i> Resources identified by URLs</li>
+            <li><i class="fas fa-circle"></i> Returns JSON/XML responses</li>
+            <li><i class="fas fa-circle"></i> Used by: Twitter, GitHub, Stripe, Google</li>
+          </ul>
+        </div>
+        <div class="terminal-window">
+          <div class="terminal-bar"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div><span>REST endpoints</span></div>
+          <div class="terminal-body">
+<span class="t-comment"># CRUD operations on /users resource</span>
+
+<span class="t-method">GET</span>    <span class="t-url">/api/users</span>       <span class="t-gray"># List all users</span>
+<span class="t-method">GET</span>    <span class="t-url">/api/users/1</span>    <span class="t-gray"># Get user by ID</span>
+<span class="t-method">POST</span>   <span class="t-url">/api/users</span>       <span class="t-gray"># Create new user</span>
+<span class="t-method">PUT</span>    <span class="t-url">/api/users/1</span>    <span class="t-gray"># Update user fully</span>
+<span class="t-method">PATCH</span>  <span class="t-url">/api/users/1</span>    <span class="t-gray"># Update partially</span>
+<span class="t-method">DELETE</span> <span class="t-url">/api/users/1</span>    <span class="t-gray"># Delete user</span>
+
+<span class="t-comment"># Response format</span>
+{
+  <span class="t-key">"id":</span> <span class="t-num">1</span>,
+  <span class="t-key">"name":</span> <span class="t-str">"Ram Prajapati"</span>,
+  <span class="t-key">"role":</span> <span class="t-str">"Data Analyst"</span>,
+  <span class="t-key">"status":</span> <span class="t-num">200</span>
+}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="tab-graphql" class="tab-content">
+      <div class="type-layout">
+        <div class="type-info">
+          <span class="type-badge" style="background:rgba(255,107,157,0.1);color:var(--accent3);border:1px solid rgba(255,107,157,0.3)">Facebook / Meta</span>
+          <h3>GraphQL API</h3>
+          <p>GraphQL is a query language for APIs that allows clients to request exactly the data they need. Created by Facebook in 2015, it solves the over-fetching and under-fetching problems of REST.</p>
+          <ul>
+            <li><i class="fas fa-circle"></i> Single endpoint — typically /graphql</li>
+            <li><i class="fas fa-circle"></i> Client specifies exact fields needed</li>
+            <li><i class="fas fa-circle"></i> No over-fetching or under-fetching</li>
+            <li><i class="fas fa-circle"></i> Strongly typed schema</li>
+            <li><i class="fas fa-circle"></i> Used by: GitHub, Shopify, Facebook</li>
+          </ul>
+        </div>
+        <div class="terminal-window">
+          <div class="terminal-bar"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div><span>GraphQL query</span></div>
+          <div class="terminal-body">
+<span class="t-comment"># GraphQL Query — get only what you need</span>
+<span class="t-key">query</span> {
+  user(<span class="t-key">id:</span> <span class="t-str">"1"</span>) {
+    <span class="t-val">name</span>
+    <span class="t-val">email</span>
+    posts {
+      <span class="t-val">title</span>
+      <span class="t-val">createdAt</span>
+    }
+  }
+}
+
+<span class="t-comment"># Response — exactly what was asked</span>
+{
+  <span class="t-key">"data":</span> {
+    <span class="t-key">"user":</span> {
+      <span class="t-key">"name":</span> <span class="t-str">"Ram Sir"</span>,
+      <span class="t-key">"email":</span> <span class="t-str">"ram@technoglobe.in"</span>,
+      <span class="t-key">"posts":</span> [{ <span class="t-key">"title":</span> <span class="t-str">"API Guide"</span> }]
+    }
+  }
+}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="tab-soap" class="tab-content">
+      <div class="type-layout">
+        <div class="type-info">
+          <span class="type-badge" style="background:rgba(255,212,0,0.1);color:var(--accent4);border:1px solid rgba(255,212,0,0.3)">Enterprise Legacy</span>
+          <h3>SOAP API</h3>
+          <p>SOAP (Simple Object Access Protocol) is a protocol that uses XML for messaging. It's highly standardized, secure, and used in enterprise and banking applications.</p>
+          <ul>
+            <li><i class="fas fa-circle"></i> Uses XML exclusively</li>
+            <li><i class="fas fa-circle"></i> Strict standards — WSDL defines contract</li>
+            <li><i class="fas fa-circle"></i> Built-in security (WS-Security)</li>
+            <li><i class="fas fa-circle"></i> Works over HTTP, SMTP, TCP</li>
+            <li><i class="fas fa-circle"></i> Used by: Banks, PayPal (legacy), SAP</li>
+          </ul>
+        </div>
+        <div class="terminal-window">
+          <div class="terminal-bar"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div><span>SOAP envelope</span></div>
+          <div class="terminal-body">
+<span class="t-comment">&lt;!-- SOAP Request (XML) --&gt;</span>
+<span class="t-key">&lt;soapenv:Envelope</span>
+  xmlns:soapenv=<span class="t-str">"http://schemas.xmlsoap.org"</span>
+  xmlns:usr=<span class="t-str">"http://user.service.com"</span><span class="t-key">&gt;</span>
+
+  <span class="t-key">&lt;soapenv:Header/&gt;</span>
+  <span class="t-key">&lt;soapenv:Body&gt;</span>
+    <span class="t-key">&lt;usr:GetUser&gt;</span>
+      <span class="t-key">&lt;usr:UserId&gt;</span><span class="t-val">42</span><span class="t-key">&lt;/usr:UserId&gt;</span>
+    <span class="t-key">&lt;/usr:GetUser&gt;</span>
+  <span class="t-key">&lt;/soapenv:Body&gt;</span>
+
+<span class="t-key">&lt;/soapenv:Envelope&gt;</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="tab-grpc" class="tab-content">
+      <div class="type-layout">
+        <div class="type-info">
+          <span class="type-badge" style="background:rgba(0,255,136,0.1);color:var(--green);border:1px solid rgba(0,255,136,0.3)">Google — High Performance</span>
+          <h3>gRPC API</h3>
+          <p>gRPC (Google Remote Procedure Call) uses Protocol Buffers (Protobuf) for serialization and HTTP/2 for transport. It's extremely fast and used in microservices.</p>
+          <ul>
+            <li><i class="fas fa-circle"></i> Uses Protobuf — binary, smaller than JSON</li>
+            <li><i class="fas fa-circle"></i> HTTP/2 — multiplexing, streaming</li>
+            <li><i class="fas fa-circle"></i> Strongly typed contracts (.proto files)</li>
+            <li><i class="fas fa-circle"></i> 5–10x faster than REST for internal services</li>
+            <li><i class="fas fa-circle"></i> Used by: Netflix, Square, Google Cloud</li>
+          </ul>
+        </div>
+        <div class="terminal-window">
+          <div class="terminal-bar"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div><span>user.proto</span></div>
+          <div class="terminal-body">
+<span class="t-comment">// Protocol Buffer definition (.proto)</span>
+<span class="t-key">syntax</span> = <span class="t-str">"proto3"</span>;
+
+<span class="t-key">message</span> <span class="t-cl">UserRequest</span> {
+  <span class="t-val">string</span> user_id = <span class="t-num">1</span>;
+}
+
+<span class="t-key">message</span> <span class="t-cl">UserResponse</span> {
+  <span class="t-val">string</span> name    = <span class="t-num">1</span>;
+  <span class="t-val">string</span> email   = <span class="t-num">2</span>;
+  <span class="t-val">int32</span>  age     = <span class="t-num">3</span>;
+}
+
+<span class="t-key">service</span> <span class="t-cl">UserService</span> {
+  <span class="t-key">rpc</span> <span class="t-fn">GetUser</span>(<span class="t-cl">UserRequest</span>)
+    <span class="t-key">returns</span> (<span class="t-cl">UserResponse</span>);
+}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="tab-websocket" class="tab-content">
+      <div class="type-layout">
+        <div class="type-info">
+          <span class="type-badge" style="background:rgba(0,212,255,0.1);color:var(--accent2);border:1px solid rgba(0,212,255,0.3)">Real-Time Communication</span>
+          <h3>WebSocket API</h3>
+          <p>WebSocket provides full-duplex, persistent connections between client and server. Unlike HTTP, the connection stays open so data flows both ways in real time.</p>
+          <ul>
+            <li><i class="fas fa-circle"></i> Bidirectional — server can push to client</li>
+            <li><i class="fas fa-circle"></i> Persistent connection (no reconnect overhead)</li>
+            <li><i class="fas fa-circle"></i> Low latency — ideal for live data</li>
+            <li><i class="fas fa-circle"></i> Uses ws:// or wss:// protocol</li>
+            <li><i class="fas fa-circle"></i> Used by: WhatsApp, Slack, stock tickers</li>
+          </ul>
+        </div>
+        <div class="terminal-window">
+          <div class="terminal-bar"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div><span>websocket_client.js</span></div>
+          <div class="terminal-body">
+<span class="t-comment">// JavaScript WebSocket Client</span>
+<span class="t-key">const</span> <span class="t-var">ws</span> = <span class="t-key">new</span> <span class="t-cl">WebSocket</span>(
+  <span class="t-str">'wss://api.example.com/live'</span>
+);
+
+<span class="t-var">ws</span>.<span class="t-fn">onopen</span> = () => {
+  <span class="t-var">ws</span>.<span class="t-fn">send</span>(<span class="t-cl">JSON</span>.<span class="t-fn">stringify</span>({
+    <span class="t-key">type:</span> <span class="t-str">'subscribe'</span>,
+    <span class="t-key">channel:</span> <span class="t-str">'stock_prices'</span>
+  }));
+};
+
+<span class="t-var">ws</span>.<span class="t-fn">onmessage</span> = (<span class="t-var">event</span>) => {
+  <span class="t-key">const</span> <span class="t-var">data</span> = <span class="t-cl">JSON</span>.<span class="t-fn">parse</span>(<span class="t-var">event</span>.data);
+  <span class="t-var">console</span>.<span class="t-fn">log</span>(<span class="t-str">`Price: ₹</span>${<span class="t-var">data</span>.price}<span class="t-str">`</span>);
+};
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="tab-flask" class="tab-content">
+      <div class="type-layout">
+        <div class="type-info">
+          <span class="type-badge" style="background:rgba(255,140,66,0.1);color:var(--orange);border:1px solid rgba(255,140,66,0.3)">Python Framework</span>
+          <h3>Flask API</h3>
+          <p>Flask is a lightweight Python web framework used to build REST APIs quickly. It's minimal, flexible, and perfect for beginners and small to medium projects.</p>
+          <ul>
+            <li><i class="fas fa-circle"></i> Micro-framework — minimal boilerplate</li>
+            <li><i class="fas fa-circle"></i> Easy routing with @app.route decorators</li>
+            <li><i class="fas fa-circle"></i> JSON responses with jsonify()</li>
+            <li><i class="fas fa-circle"></i> Supports Flask-RESTful extension</li>
+            <li><i class="fas fa-circle"></i> Great for learning and prototyping</li>
+          </ul>
+        </div>
+        <div class="terminal-window">
+          <div class="terminal-bar"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div><span>flask_api.py</span></div>
+          <div class="terminal-body">
+<span class="t-key">from</span> flask <span class="t-key">import</span> Flask, jsonify, request
+
+<span class="t-var">app</span> = <span class="t-cl">Flask</span>(__name__)
+
+users = [
+  {<span class="t-str">"id"</span>:<span class="t-num">1</span>, <span class="t-str">"name"</span>:<span class="t-str">"Ram Sir"</span>},
+  {<span class="t-str">"id"</span>:<span class="t-num">2</span>, <span class="t-str">"name"</span>:<span class="t-str">"Alice"</span>}
+]
+
+<span class="t-key">@</span><span class="t-var">app</span>.route(<span class="t-str">'/api/users'</span>, methods=[<span class="t-str">'GET'</span>])
+<span class="t-key">def</span> <span class="t-fn">get_users</span>():
+    <span class="t-key">return</span> <span class="t-fn">jsonify</span>(users)
+
+<span class="t-key">@</span><span class="t-var">app</span>.route(<span class="t-str">'/api/users/&lt;int:uid&gt;'</span>, methods=[<span class="t-str">'GET'</span>])
+<span class="t-key">def</span> <span class="t-fn">get_user</span>(uid):
+    user = [u <span class="t-key">for</span> u <span class="t-key">in</span> users <span class="t-key">if</span> u[<span class="t-str">"id"</span>]==uid]
+    <span class="t-key">return</span> <span class="t-fn">jsonify</span>(user[<span class="t-num">0</span>]) <span class="t-key">if</span> user <span class="t-key">else</span> (<span class="t-str">"Not Found"</span>,<span class="t-num">404</span>)
+
+<span class="t-key">@</span><span class="t-var">app</span>.route(<span class="t-str">'/api/users'</span>, methods=[<span class="t-str">'POST'</span>])
+<span class="t-key">def</span> <span class="t-fn">create_user</span>():
+    data = request.get_json()
+    users.append(data)
+    <span class="t-key">return</span> <span class="t-fn">jsonify</span>(data), <span class="t-num">201</span>
+
+<span class="t-key">if</span> __name__ == <span class="t-str">'__main__'</span>:
+    <span class="t-var">app</span>.<span class="t-fn">run</span>(debug=<span class="t-key">True</span>)
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="tab-fastapi" class="tab-content">
+      <div class="type-layout">
+        <div class="type-info">
+          <span class="type-badge" style="background:rgba(0,255,136,0.1);color:var(--green);border:1px solid rgba(0,255,136,0.3)">Modern Python — Fast &amp; Async</span>
+          <h3>FastAPI</h3>
+          <p>FastAPI is a modern, high-performance Python framework built on Pydantic and Starlette. It's async-native, auto-generates docs, and is 2–3x faster than Flask.</p>
+          <ul>
+            <li><i class="fas fa-circle"></i> Auto-generates Swagger UI docs</li>
+            <li><i class="fas fa-circle"></i> Async/await support natively</li>
+            <li><i class="fas fa-circle"></i> Type hints with Pydantic validation</li>
+            <li><i class="fas fa-circle"></i> One of the fastest Python frameworks</li>
+            <li><i class="fas fa-circle"></i> Used by: Microsoft, Netflix, Uber</li>
+          </ul>
+        </div>
+        <div class="terminal-window">
+          <div class="terminal-bar"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div><span>fastapi_app.py</span></div>
+          <div class="terminal-body">
+<span class="t-key">from</span> fastapi <span class="t-key">import</span> FastAPI, HTTPException
+<span class="t-key">from</span> pydantic <span class="t-key">import</span> BaseModel
+
+<span class="t-var">app</span> = <span class="t-cl">FastAPI</span>(title=<span class="t-str">"User API"</span>)
+
+<span class="t-key">class</span> <span class="t-cl">User</span>(BaseModel):
+    name: str
+    email: str
+    age: int
+
+<span class="t-key">@</span><span class="t-var">app</span>.get(<span class="t-str">"/users/{user_id}"</span>)
+<span class="t-key">async def</span> <span class="t-fn">get_user</span>(user_id: int):
+    <span class="t-key">return</span> {<span class="t-str">"id"</span>: user_id, <span class="t-str">"name"</span>: <span class="t-str">"Ram Sir"</span>}
+
+<span class="t-key">@</span><span class="t-var">app</span>.post(<span class="t-str">"/users"</span>, status_code=<span class="t-num">201</span>)
+<span class="t-key">async def</span> <span class="t-fn">create_user</span>(user: <span class="t-cl">User</span>):
+    <span class="t-comment"># Pydantic auto-validates input!</span>
+    <span class="t-key">return</span> {<span class="t-str">"message"</span>: <span class="t-str">"Created"</span>, <span class="t-str">"data"</span>: user}
+
+<span class="t-comment"># Run: uvicorn fastapi_app:app --reload</span>
+<span class="t-comment"># Docs at: http://localhost:8000/docs</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="tab-openapi" class="tab-content">
+      <div class="type-layout">
+        <div class="type-info">
+          <span class="type-badge" style="background:rgba(108,99,255,0.15);color:var(--accent);border:1px solid rgba(108,99,255,0.3)">API Specification Standard</span>
+          <h3>OpenAPI / Swagger</h3>
+          <p>OpenAPI (formerly Swagger) is a specification for describing REST APIs. It defines the structure of your API in a YAML or JSON file, enabling auto-generated documentation and client SDKs.</p>
+          <ul>
+            <li><i class="fas fa-circle"></i> YAML/JSON-based API specification</li>
+            <li><i class="fas fa-circle"></i> Swagger UI generates interactive docs</li>
+            <li><i class="fas fa-circle"></i> Auto-generate client SDKs in any language</li>
+            <li><i class="fas fa-circle"></i> Industry standard for API documentation</li>
+            <li><i class="fas fa-circle"></i> Supported by FastAPI, Flask-RESTX, etc.</li>
+          </ul>
+        </div>
+        <div class="terminal-window">
+          <div class="terminal-bar"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div><span>openapi.yaml</span></div>
+          <div class="terminal-body">
+<span class="t-key">openapi:</span> <span class="t-str">"3.0.0"</span>
+<span class="t-key">info:</span>
+  <span class="t-key">title:</span> <span class="t-str">User API</span>
+  <span class="t-key">version:</span> <span class="t-str">"1.0.0"</span>
+<span class="t-key">paths:</span>
+  <span class="t-key">/users:</span>
+    <span class="t-key">get:</span>
+      <span class="t-key">summary:</span> <span class="t-str">Get all users</span>
+      <span class="t-key">responses:</span>
+        <span class="t-key">"200":</span>
+          <span class="t-key">description:</span> <span class="t-str">OK</span>
+          <span class="t-key">content:</span>
+            <span class="t-key">application/json:</span>
+              <span class="t-key">schema:</span>
+                <span class="t-key">type:</span> <span class="t-val">array</span>
+                <span class="t-key">items:</span>
+                  <span class="t-key">$ref:</span> <span class="t-str">'#/components/schemas/User'</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CODE EXAMPLES -->
+<section id="examples">
+  <div class="container">
+    <div class="section-label reveal"><i class="fas fa-code"></i> Code Examples</div>
+    <h2 class="section-title reveal">Real Code <span class="highlight">Examples</span></h2>
+    <p class="section-sub reveal">Working code snippets you can run right now. Copy, paste, and learn by doing.</p>
+    <div class="examples-grid">
+
+      <!-- Python requests -->
+      <div class="code-card reveal">
+        <div class="code-card-header">
+          <div class="title"><i class="fab fa-python" style="color:#3776ab"></i> Python — Call REST API</div>
+          <div style="display:flex;gap:8px;align-items:center">
+            <span class="lang-badge" style="background:#3776ab20;color:#3776ab">Python</span>
+            <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i> Copy</button>
+          </div>
+        </div>
+        <div class="code-block">
+<span class="cm"># pip install requests</span>
+<span class="kw">import</span> requests
+
+<span class="cm"># GET — fetch data from public API</span>
+<span class="var">url</span> = <span class="str">"https://jsonplaceholder.typicode.com/users/1"</span>
+<span class="var">response</span> = requests.<span class="fn">get</span>(<span class="var">url</span>)
+
+<span class="kw">if</span> <span class="var">response</span>.status_code == <span class="num">200</span>:
+    <span class="var">data</span> = <span class="var">response</span>.json()
+    <span class="fn">print</span>(<span class="str">f"Name: {data['name']}"</span>)
+    <span class="fn">print</span>(<span class="str">f"Email: {data['email']}"</span>)
+
+<span class="cm"># POST — send data to API</span>
+<span class="var">new_user</span> = {<span class="str">"name"</span>: <span class="str">"Ram Sir"</span>, <span class="str">"email"</span>: <span class="str">"ram@technoglobe.in"</span>}
+<span class="var">res</span> = requests.<span class="fn">post</span>(
+    <span class="str">"https://jsonplaceholder.typicode.com/users"</span>,
+    json=<span class="var">new_user</span>
+)
+<span class="fn">print</span>(<span class="str">f"Created: {res.status_code} — {res.json()}"</span>)
+
+<span class="cm"># With Headers (Authorization)</span>
+<span class="var">headers</span> = {<span class="str">"Authorization"</span>: <span class="str">"Bearer YOUR_TOKEN"</span>}
+<span class="var">r</span> = requests.<span class="fn">get</span>(<span class="str">"https://api.github.com/user"</span>, headers=<span class="var">headers</span>)
+<span class="fn">print</span>(<span class="var">r</span>.json())
+        </div>
+      </div>
+
+      <!-- Flask Full CRUD -->
+      <div class="code-card reveal">
+        <div class="code-card-header">
+          <div class="title"><i class="fas fa-flask" style="color:#var(--orange)"></i> Flask — Full CRUD API</div>
+          <div style="display:flex;gap:8px;align-items:center">
+            <span class="lang-badge" style="background:#ff8c4220;color:#ff8c42">Flask</span>
+            <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i> Copy</button>
+          </div>
+        </div>
+        <div class="code-block">
+<span class="kw">from</span> flask <span class="kw">import</span> Flask, jsonify, request
+<span class="kw">from</span> datetime <span class="kw">import</span> datetime
+
+<span class="var">app</span> = Flask(__name__)
+<span class="var">students</span> = []
+<span class="var">next_id</span> = <span class="num">1</span>
+
+<span class="cm"># GET all students</span>
+<span class="op">@</span><span class="var">app</span>.route(<span class="str">'/students'</span>, methods=[<span class="str">'GET'</span>])
+<span class="kw">def</span> <span class="fn">get_all</span>():
+    <span class="kw">return</span> <span class="fn">jsonify</span>({<span class="str">"count"</span>: len(students), <span class="str">"data"</span>: students})
+
+<span class="cm"># POST — create student</span>
+<span class="op">@</span><span class="var">app</span>.route(<span class="str">'/students'</span>, methods=[<span class="str">'POST'</span>])
+<span class="kw">def</span> <span class="fn">create</span>():
+    <span class="kw">global</span> <span class="var">next_id</span>
+    <span class="var">body</span> = request.get_json()
+    <span class="var">student</span> = {
+        <span class="str">"id"</span>: <span class="var">next_id</span>,
+        <span class="str">"name"</span>: <span class="var">body</span>[<span class="str">"name"</span>],
+        <span class="str">"course"</span>: <span class="var">body</span>.get(<span class="str">"course"</span>, <span class="str">"Data Analytics"</span>),
+        <span class="str">"joined"</span>: datetime.now().isoformat()
+    }
+    students.append(student)
+    <span class="var">next_id</span> += <span class="num">1</span>
+    <span class="kw">return</span> <span class="fn">jsonify</span>(student), <span class="num">201</span>
+
+<span class="cm"># DELETE student</span>
+<span class="op">@</span><span class="var">app</span>.route(<span class="str">'/students/&lt;int:sid&gt;'</span>, methods=[<span class="str">'DELETE'</span>])
+<span class="kw">def</span> <span class="fn">delete</span>(sid):
+    <span class="kw">global</span> <span class="var">students</span>
+    <span class="var">students</span> = [s <span class="kw">for</span> s <span class="kw">in</span> students <span class="kw">if</span> s[<span class="str">"id"</span>] != sid]
+    <span class="kw">return</span> <span class="fn">jsonify</span>({<span class="str">"message"</span>: <span class="str">"Deleted"</span>})
+
+<span class="kw">if</span> __name__ == <span class="str">'__main__'</span>:
+    <span class="var">app</span>.<span class="fn">run</span>(debug=True, port=<span class="num">5000</span>)
+        </div>
+      </div>
+
+      <!-- FastAPI -->
+      <div class="code-card reveal">
+        <div class="code-card-header">
+          <div class="title"><i class="fas fa-bolt" style="color:#00ff88"></i> FastAPI — Async with Auth</div>
+          <div style="display:flex;gap:8px;align-items:center">
+            <span class="lang-badge" style="background:#00ff8820;color:#00ff88">FastAPI</span>
+            <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i> Copy</button>
+          </div>
+        </div>
+        <div class="code-block">
+<span class="kw">from</span> fastapi <span class="kw">import</span> FastAPI, Depends, HTTPException, Header
+<span class="kw">from</span> pydantic <span class="kw">import</span> BaseModel, EmailStr
+<span class="kw">from</span> typing <span class="kw">import</span> Optional
+
+<span class="var">app</span> = FastAPI(title=<span class="str">"Technoglobe API"</span>, version=<span class="str">"1.0"</span>)
+
+<span class="cm"># Pydantic model — auto-validation</span>
+<span class="kw">class</span> <span class="cl">Student</span>(BaseModel):
+    name: str
+    email: str
+    course: str = <span class="str">"Data Analytics"</span>
+    age: Optional[int] = None
+
+<span class="cm"># Simple API key auth</span>
+<span class="kw">async def</span> <span class="fn">verify_token</span>(x_api_key: str = Header(...)):
+    <span class="kw">if</span> x_api_key != <span class="str">"SECRET123"</span>:
+        <span class="kw">raise</span> HTTPException(<span class="num">403</span>, <span class="str">"Invalid API Key"</span>)
+
+<span class="op">@</span><span class="var">app</span>.get(<span class="str">"/"</span>)
+<span class="kw">async def</span> <span class="fn">root</span>():
+    <span class="kw">return</span> {<span class="str">"msg"</span>: <span class="str">"Welcome to Technoglobe API"</span>}
+
+<span class="op">@</span><span class="var">app</span>.post(<span class="str">"/enroll"</span>, dependencies=[Depends(verify_token)])
+<span class="kw">async def</span> <span class="fn">enroll_student</span>(student: <span class="cl">Student</span>):
+    <span class="kw">return</span> {<span class="str">"status"</span>: <span class="str">"enrolled"</span>, <span class="str">"data"</span>: student}
+
+<span class="op">@</span><span class="var">app</span>.get(<span class="str">"/students/{student_id}"</span>)
+<span class="kw">async def</span> <span class="fn">get_student</span>(student_id: int, name: Optional[str] = None):
+    <span class="kw">return</span> {<span class="str">"id"</span>: student_id, <span class="str">"filter_name"</span>: name}
+        </div>
+      </div>
+
+      <!-- JavaScript Fetch -->
+      <div class="code-card reveal">
+        <div class="code-card-header">
+          <div class="title"><i class="fab fa-js-square" style="color:#f0db4f"></i> JavaScript — Fetch API</div>
+          <div style="display:flex;gap:8px;align-items:center">
+            <span class="lang-badge" style="background:#f0db4f20;color:#f0db4f">JS / Node</span>
+            <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i> Copy</button>
+          </div>
+        </div>
+        <div class="code-block">
+<span class="cm">// Modern Fetch API — async/await</span>
+<span class="kw">async function</span> <span class="fn">getWeather</span>(city) {
+  <span class="kw">const</span> <span class="var">apiKey</span> = <span class="str">"YOUR_OPENWEATHER_KEY"</span>;
+  <span class="kw">const</span> <span class="var">url</span> = <span class="str">`https://api.openweathermap.org/data/2.5/weather
+             ?q=${city}&appid=${apiKey}&units=metric`</span>;
+
+  <span class="kw">try</span> {
+    <span class="kw">const</span> <span class="var">response</span> = <span class="kw">await</span> <span class="fn">fetch</span>(<span class="var">url</span>);
+    <span class="kw">if</span> (!<span class="var">response</span>.ok) <span class="kw">throw new</span> Error(<span class="str">"City not found"</span>);
+    
+    <span class="kw">const</span> <span class="var">data</span> = <span class="kw">await</span> <span class="var">response</span>.<span class="fn">json</span>();
+    <span class="kw">return</span> {
+      city: <span class="var">data</span>.name,
+      temp: <span class="var">data</span>.main.temp,
+      desc: <span class="var">data</span>.weather[<span class="num">0</span>].description
+    };
+  } <span class="kw">catch</span> (err) {
+    console.error(<span class="str">"API Error:"</span>, err.message);
+  }
+}
+
+<span class="cm">// POST with headers</span>
+<span class="kw">async function</span> <span class="fn">createPost</span>(postData) {
+  <span class="kw">const</span> <span class="var">res</span> = <span class="kw">await</span> <span class="fn">fetch</span>(<span class="str">"/api/posts"</span>, {
+    method: <span class="str">"POST"</span>,
+    headers: { <span class="str">"Content-Type"</span>: <span class="str">"application/json"</span>,
+               <span class="str">"Authorization"</span>: <span class="str">"Bearer TOKEN"</span> },
+    body: <span class="cl">JSON</span>.<span class="fn">stringify</span>(<span class="var">postData</span>)
+  });
+  <span class="kw">return await</span> <span class="var">res</span>.<span class="fn">json</span>();
+}
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- REAL WORLD -->
+<section id="realworld">
+  <div class="container">
+    <div class="section-label reveal"><i class="fas fa-globe"></i> Real World</div>
+    <h2 class="section-title reveal">Real-Life <span class="highlight">Use Cases</span></h2>
+    <p class="section-sub reveal">APIs power virtually every app you use daily. Here's where you encounter them without even knowing.</p>
+    <div class="rw-grid">
+      <div class="rw-card reveal" style="border-color:rgba(37,211,102,0.2)">
+        <span class="rw-icon">💳</span>
+        <h3>Payment APIs</h3>
+        <p>Razorpay, Stripe, PayPal enable secure payments on any website without storing card data.</p>
+        <div class="rw-example">Razorpay · Stripe · PayU</div>
+      </div>
+      <div class="rw-card reveal" style="border-color:rgba(66,133,244,0.2)">
+        <span class="rw-icon">🗺️</span>
+        <h3>Maps & Location</h3>
+        <p>Uber, Swiggy, and food delivery apps use Google Maps API for routing and location tracking.</p>
+        <div class="rw-example">Google Maps · Mapbox</div>
+      </div>
+      <div class="rw-card reveal" style="border-color:rgba(255,107,0,0.2)">
+        <span class="rw-icon">☁️</span>
+        <h3>Weather Apps</h3>
+        <p>Every weather app fetches data from OpenWeatherMap or AccuWeather APIs in real-time.</p>
+        <div class="rw-example">OpenWeatherMap · AccuWeather</div>
+      </div>
+      <div class="rw-card reveal" style="border-color:rgba(108,99,255,0.2)">
+        <span class="rw-icon">🤖</span>
+        <h3>AI & ChatBots</h3>
+        <p>ChatGPT, Gemini, and AI assistants expose APIs so developers can embed AI into any app.</p>
+        <div class="rw-example">OpenAI · Gemini · Claude</div>
+      </div>
+      <div class="rw-card reveal" style="border-color:rgba(0,212,255,0.2)">
+        <span class="rw-icon">🔐</span>
+        <h3>Login with Google</h3>
+        <p>"Login with Google/Facebook/GitHub" — OAuth API handles authentication securely.</p>
+        <div class="rw-example">OAuth 2.0 · JWT</div>
+      </div>
+      <div class="rw-card reveal" style="border-color:rgba(255,212,0,0.2)">
+        <span class="rw-icon">📱</span>
+        <h3>Social Media</h3>
+        <p>Schedule posts, fetch analytics, auto-share — all via Twitter, Instagram, LinkedIn APIs.</p>
+        <div class="rw-example">Twitter API · Meta API</div>
+      </div>
+      <div class="rw-card reveal" style="border-color:rgba(255,107,157,0.2)">
+        <span class="rw-icon">✉️</span>
+        <h3>Email & SMS</h3>
+        <p>OTPs, transactional emails, and bulk SMS are sent via APIs like SendGrid, Twilio.</p>
+        <div class="rw-example">SendGrid · Twilio · MSG91</div>
+      </div>
+      <div class="rw-card reveal" style="border-color:rgba(0,255,136,0.2)">
+        <span class="rw-icon">📊</span>
+        <h3>Data Analytics</h3>
+        <p>Connect Excel, Power BI, Tableau to live data sources via REST APIs and SQL connectors.</p>
+        <div class="rw-example">Power BI API · Tableau API</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Q&A -->
+<section id="qa">
+  <div class="container">
+    <div class="section-label reveal"><i class="fas fa-briefcase"></i> Interview Prep</div>
+    <h2 class="section-title reveal">30+ Interview <span class="highlight">Q&A</span></h2>
+    <p class="section-sub reveal">Curated questions from real interviews — from freshers to senior developer level.</p>
+    <div class="qa-filter reveal">
+      <button class="filter-btn active" onclick="filterQA('all', this)">All Questions</button>
+      <button class="filter-btn" onclick="filterQA('easy', this)">🟢 Easy</button>
+      <button class="filter-btn" onclick="filterQA('med', this)">🟡 Medium</button>
+      <button class="filter-btn" onclick="filterQA('hard', this)">🔴 Advanced</button>
+    </div>
+    <div class="qa-list reveal" id="qa-list"></div>
+  </div>
+</section>
+
+<!-- TRAINER -->
+<section id="trainer">
+  <div class="container">
+    <div class="section-label reveal"><i class="fas fa-chalkboard-teacher"></i> Your Trainer</div>
+    <h2 class="section-title reveal" style="text-align:center">Meet Your <span class="highlight">Trainer</span></h2>
+    <div class="trainer-card reveal">
+      <div class="trainer-avatar">R</div>
+      <div class="trainer-info">
+        <h2>Ramgopal Prajapati</h2>
+        <div class="role"><i class="fas fa-graduation-cap"></i> &nbsp;Data Analytics Trainer — Technoglobe IT Solutions, Indore</div>
+        <p>With deep expertise in Data Analytics, Python, SQL, Power BI, and Tableau, Ram Sir has trained hundreds of students and professionals to crack data careers. His teaching philosophy: learn by building real projects.</p>
+        <div class="trainer-tags">
+          <span class="trainer-tag">Python</span>
+          <span class="trainer-tag">SQL</span>
+          <span class="trainer-tag">Power BI</span>
+          <span class="trainer-tag">Tableau</span>
+          <span class="trainer-tag">REST APIs</span>
+          <span class="trainer-tag">Flask</span>
+          <span class="trainer-tag">Data Analysis</span>
+          <span class="trainer-tag">Excel</span>
+        </div>
+        <div class="trainer-social">
+          <a href="https://wa.me/919753528324" target="_blank" class="social-btn" style="background:rgba(37,211,102,0.1);border-color:rgba(37,211,102,0.3);color:#25d366"><i class="fab fa-whatsapp"></i></a>
+          <a href="#" class="social-btn"><i class="fab fa-linkedin"></i></a>
+          <a href="#" class="social-btn"><i class="fab fa-github"></i></a>
+          <a href="#" class="social-btn"><i class="fas fa-globe"></i></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="container">
+    <div class="section-label reveal"><i class="fas fa-envelope"></i> Get In Touch</div>
+    <h2 class="section-title reveal">Send a <span class="highlight">Message</span></h2>
+    <div class="contact-grid">
+      <div class="contact-info reveal">
+        <h3>Let's Connect!</h3>
+        <p>Want to join our Data Analytics batch, have a question about APIs, or need career guidance? Reach out directly — we respond fast!</p>
+        <div class="contact-methods">
+          <a href="https://wa.me/919753528324" target="_blank" class="contact-method">
+            <div class="cm-icon" style="background:rgba(37,211,102,0.1);color:#25d366"><i class="fab fa-whatsapp"></i></div>
+            <div class="cm-text"><h4>WhatsApp</h4><p>+91 97535 28324 — Chat instantly</p></div>
+          </a>
+          <a href="tel:+919753528324" class="contact-method">
+            <div class="cm-icon" style="background:rgba(108,99,255,0.1);color:var(--accent)"><i class="fas fa-phone"></i></div>
+            <div class="cm-text"><h4>Phone / Call</h4><p>+91 97535 28324</p></div>
+          </a>
+          <div class="contact-method">
+            <div class="cm-icon" style="background:rgba(0,212,255,0.1);color:var(--accent2)"><i class="fas fa-map-marker-alt"></i></div>
+            <div class="cm-text"><h4>Location</h4><p>Technoglobe IT Solutions, Indore, MP</p></div>
+          </div>
+        </div>
+      </div>
+      <div class="contact-form reveal">
+        <h3><i class="fas fa-paper-plane" style="color:var(--accent)"></i> &nbsp;Send Message</h3>
+        <div class="form-group">
+          <label>Your Name</label>
+          <input type="text" id="fm-name" placeholder="Enter your full name">
+        </div>
+        <div class="form-group">
+          <label>Phone / WhatsApp</label>
+          <input type="tel" id="fm-phone" placeholder="+91 XXXXX XXXXX">
+        </div>
+        <div class="form-group">
+          <label>Topic</label>
+          <select id="fm-topic">
+            <option value="">Select a topic...</option>
+            <option>API Training Enquiry</option>
+            <option>Data Analytics Batch</option>
+            <option>Python Course</option>
+            <option>Power BI / Tableau</option>
+            <option>Other Question</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Message</label>
+          <textarea id="fm-msg" placeholder="Write your message here..."></textarea>
+        </div>
+        <button class="form-submit" onclick="sendMessage()"><i class="fas fa-paper-plane"></i> Send Message</button>
+        <a href="https://wa.me/919753528324" target="_blank" class="whatsapp-cta"><i class="fab fa-whatsapp" style="font-size:1.2rem"></i> Chat on WhatsApp Directly</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="logo"><i class="fas fa-plug-circle-bolt" style="-webkit-text-fill-color:var(--accent)"></i> API Masterclass</div>
+      <p>Your complete guide to understanding and building APIs. Crafted by Ram Sir at Technoglobe IT Solutions, Indore.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Content</h4>
+      <ul>
+        <li><a href="#what">What is API</a></li>
+        <li><a href="#why">Why APIs Matter</a></li>
+        <li><a href="#types">API Types</a></li>
+        <li><a href="#examples">Code Examples</a></li>
+        <li><a href="#realworld">Real World Uses</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>API Types</h4>
+      <ul>
+        <li><a href="#types">REST API</a></li>
+        <li><a href="#types">GraphQL</a></li>
+        <li><a href="#types">Flask API</a></li>
+        <li><a href="#types">FastAPI</a></li>
+        <li><a href="#types">WebSocket</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="https://wa.me/919753528324">WhatsApp</a></li>
+        <li><a href="tel:+919753528324">Call: 9753528324</a></li>
+        <li><a href="#trainer">About Trainer</a></li>
+        <li><a href="#qa">Interview Prep</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2024 API Masterclass by <strong>Ramgopal Prajapati</strong> — Technoglobe IT Solutions, Indore</p>
+    <p style="color:var(--text3)">Made with <span style="color:var(--accent3)">♥</span> for Data Analytics learners</p>
+  </div>
+</footer>
+
+<div class="toast" id="toast"><i class="fas fa-check-circle"></i> <span id="toast-msg">Copied!</span></div>
+
+<script>
+// ─── Q&A DATA ───
+const qaData = [
+  { q: "What is an API?", a: "API (Application Programming Interface) is a set of rules and protocols that allows two software applications to communicate with each other. It defines how requests are made, what data is exchanged, and how responses look.", diff: "easy" },
+  { q: "What does REST stand for? What are its principles?", a: "REST stands for Representational State Transfer. Its 6 principles are: (1) Client-Server separation, (2) Stateless — each request contains all needed info, (3) Cacheable, (4) Uniform Interface, (5) Layered system, (6) Code on Demand (optional). REST APIs communicate over HTTP.", diff: "easy" },
+  { q: "What is the difference between GET and POST?", a: "GET retrieves data from the server and parameters go in the URL — it's idempotent (same request = same result) and should not change server state. POST sends data in the request body to create a resource, is not idempotent, and is used when submitting forms or creating records.", diff: "easy" },
+  { q: "What are HTTP status codes? Name the common ones.", a: "HTTP status codes indicate the result of a request. Key codes: 200 OK, 201 Created, 204 No Content, 400 Bad Request, 401 Unauthorized, 403 Forbidden, 404 Not Found, 409 Conflict, 422 Unprocessable Entity, 429 Too Many Requests, 500 Internal Server Error, 502 Bad Gateway.", diff: "easy" },
+  { q: "What is JSON and why is it used in APIs?", a: "JSON (JavaScript Object Notation) is a lightweight, text-based data format that's easy for humans to read and machines to parse. It's the de-facto standard for REST APIs because it's language-agnostic, compact, and natively supported in JavaScript, Python, and virtually every programming language.", diff: "easy" },
+  { q: "What is an API endpoint?", a: "An endpoint is a specific URL that represents a resource or action in an API. For example, GET /api/users is an endpoint to fetch users. Each endpoint maps to a specific function on the server. Endpoints are the 'addresses' through which clients interact with the API.", diff: "easy" },
+  { q: "What is the difference between REST and SOAP?", a: "REST uses HTTP with JSON/XML, is lightweight, stateless, and easy to use. SOAP uses XML exclusively, is more rigid, has built-in error handling (WSDL), WS-Security, and is preferred in enterprise/banking. REST is faster and simpler; SOAP is more secure and standardized.", diff: "med" },
+  { q: "What is API Authentication? What are its types?", a: "API Authentication verifies the identity of a client. Types: (1) API Key — a simple token in header/query, (2) Basic Auth — Base64-encoded username:password, (3) Bearer Token — JWT passed in Authorization header, (4) OAuth 2.0 — industry standard for delegated access, (5) HMAC — cryptographic signature for each request.", diff: "med" },
+  { q: "What is JWT (JSON Web Token)?", a: "JWT is a compact, URL-safe token for transmitting information between parties. It has 3 parts: Header (algorithm), Payload (claims/data), and Signature (verification). Servers issue JWTs after login; clients send them in the Authorization header. JWTs are stateless — servers don't store sessions.", diff: "med" },
+  { q: "What is the difference between PUT and PATCH?", a: "PUT replaces the entire resource with the data provided — if a field is missing, it's removed. PATCH only updates the specified fields, leaving others unchanged. Example: PUT /users/1 needs all fields; PATCH /users/1 can send just {email: 'new@email.com'} to update only the email.", diff: "med" },
+  { q: "What is API versioning and why is it important?", a: "API versioning allows you to evolve your API without breaking existing clients. Common strategies: URL versioning (/v1/users, /v2/users), Header versioning (API-Version: 2), Query param (/users?version=2). It's critical because once an API is public, changing its structure breaks all integrators.", diff: "med" },
+  { q: "What is CORS? Why does it happen?", a: "CORS (Cross-Origin Resource Sharing) is a browser security mechanism that blocks web pages from making requests to a different domain than the one that served them. It happens when a frontend at localhost:3000 calls a backend at localhost:5000. Fixed by adding Access-Control-Allow-Origin headers on the server.", diff: "med" },
+  { q: "What is API Rate Limiting?", a: "Rate limiting restricts how many API requests a client can make in a given time window (e.g., 1000 requests/hour). It protects the API from abuse, DoS attacks, and ensures fair usage. When exceeded, the server returns HTTP 429 Too Many Requests. Implemented via counters, token buckets, or leaky bucket algorithms.", diff: "med" },
+  { q: "What is the difference between REST and GraphQL?", a: "REST uses multiple endpoints (one per resource) and returns fixed data structures — can lead to over/under-fetching. GraphQL uses a single endpoint and clients specify exactly what fields they need. GraphQL is better for complex, nested data (social networks); REST is simpler and more cacheable.", diff: "med" },
+  { q: "What is an API Gateway?", a: "An API Gateway is a server that acts as the entry point for all clients. It handles routing to microservices, authentication, rate limiting, load balancing, caching, and logging. Examples: AWS API Gateway, Kong, NGINX. It abstracts the complexity of the backend from clients.", diff: "med" },
+  { q: "What is idempotency in APIs?", a: "An operation is idempotent if calling it multiple times produces the same result as calling it once. GET, PUT, DELETE are idempotent. POST is not — sending the same POST twice creates duplicate resources. Idempotency is crucial for safe retries in distributed systems and network failures.", diff: "med" },
+  { q: "What is OpenAPI/Swagger?", a: "OpenAPI is a specification for describing RESTful APIs using YAML or JSON. Swagger UI generates interactive documentation from the spec. FastAPI auto-generates OpenAPI docs at /docs. It enables: auto-generated client SDKs, contract-first development, and API testing without writing code.", diff: "med" },
+  { q: "What is the difference between synchronous and asynchronous APIs?", a: "Synchronous APIs block the caller until the response is received (traditional REST). Asynchronous APIs return immediately and notify the client later via webhooks, callbacks, or polling. Async is used for long-running tasks like video processing, bulk email, or report generation.", diff: "med" },
+  { q: "What is a Webhook?", a: "A webhook is a reverse API — instead of the client polling the server for updates, the server pushes data to a client URL when an event occurs. Example: Stripe sends a POST to your /webhook endpoint when a payment succeeds. Webhooks are event-driven and more efficient than polling.", diff: "med" },
+  { q: "What is gRPC and when would you use it?", a: "gRPC (Google Remote Procedure Call) uses Protocol Buffers for serialization and HTTP/2 for transport. It's 5–10x faster than REST due to binary encoding. Use gRPC for: internal microservices communication, real-time streaming, polyglot systems, and high-throughput scenarios. Not ideal for public APIs.", diff: "hard" },
+  { q: "Explain OAuth 2.0 flow", a: "OAuth 2.0 has 4 grant types. The most common Authorization Code Flow: (1) User clicks 'Login with Google', (2) App redirects to Google's auth server, (3) User grants permission, (4) Google sends auth code to app's redirect URI, (5) App exchanges code + client_secret for access_token, (6) App uses token to access APIs.", diff: "hard" },
+  { q: "What is API Caching and how does it work?", a: "API caching stores responses to reduce latency and server load. HTTP caching uses headers: Cache-Control (max-age=3600), ETag (content hash for conditional requests), Last-Modified. Server-side caching uses Redis/Memcached. CDN caching stores responses at edge nodes globally. Cache invalidation is the hard problem.", diff: "hard" },
+  { q: "What is the Richardson Maturity Model?", a: "It measures REST API maturity in 4 levels: Level 0 (single endpoint, RPC-style), Level 1 (multiple URIs for resources), Level 2 (HTTP verbs used correctly), Level 3 (HATEOAS — responses include links to related actions). Most production APIs are at Level 2; Level 3 is ideal but rare.", diff: "hard" },
+  { q: "What is HATEOAS?", a: "HATEOAS (Hypermedia As The Engine Of Application State) is a REST constraint where API responses include links to related actions. A GET /orders/1 response would include links to cancel, pay, or return the order. This makes APIs self-discoverable and reduces client-server coupling.", diff: "hard" },
+  { q: "How do you handle API errors properly?", a: "Best practices: Use correct HTTP status codes, return structured error responses with error code, message, and details fields, never expose stack traces or DB errors, use RFC 7807 Problem Details format, include a request ID for tracing, log errors server-side, and provide human-readable error messages.", diff: "hard" },
+  { q: "What is API Pagination? What are its strategies?", a: "Pagination splits large datasets into smaller pages. Strategies: (1) Offset/Limit — ?page=2&limit=20, easy but inconsistent on data changes, (2) Cursor-based — ?after=cursor_id, efficient and consistent for large datasets (used by Facebook, GitHub), (3) Keyset — similar to cursor but uses indexed columns.", diff: "hard" },
+  { q: "What are microservices and how do APIs enable them?", a: "Microservices is an architecture where an app is split into small, independent services (User Service, Payment Service, Order Service). APIs (REST or gRPC) are how these services communicate. An API Gateway routes external requests to the right service. Each service can scale, deploy, and fail independently.", diff: "hard" },
+  { q: "What is API Throttling vs Rate Limiting?", a: "Rate Limiting sets a hard cap on requests (e.g., 100/minute — after which you get 429). Throttling slows down requests instead of blocking — it degrades performance gracefully. Throttling can use a leaky bucket algorithm to smooth bursts. Both protect APIs from overload but differ in response behavior.", diff: "hard" },
+  { q: "How would you design a RESTful API for a student management system?", a: "Resources: /students, /courses, /enrollments. Endpoints: GET /students (list, support ?name=&page=), POST /students (create, validate input), GET /students/{id} (detail), PUT /students/{id} (update), DELETE /students/{id} (soft delete). Use JWT auth, return 201 on create, 404 on missing, 422 on validation fail.", diff: "hard" },
+  { q: "What is an API Contract and Contract Testing?", a: "An API contract is the agreed-upon interface between producer and consumer — defined by the OpenAPI spec. Contract testing verifies both sides honor the contract. Tools: Pact (consumer-driven contract testing). Prevents integration failures between microservices by catching breaking changes early in CI/CD.", diff: "hard" },
+  { q: "What is the difference between API and SDK?", a: "An API is the interface itself — the endpoints, methods, and protocols for communication. An SDK (Software Development Kit) is a package of pre-built code (libraries, wrappers, utilities) that makes it easier to use an API in a specific language. Example: Google Maps API vs Google Maps SDK for Android.", diff: "easy" },
+  { q: "What is content negotiation in APIs?", a: "Content negotiation allows a client and server to agree on the data format for a response. The client sends Accept: application/json or Accept: application/xml in the header. The server responds with the requested format or 406 Not Acceptable. FastAPI and Flask both support content negotiation.", diff: "med" },
+];
+
+function renderQA(filter = 'all') {
+  const list = document.getElementById('qa-list');
+  const filtered = filter === 'all' ? qaData : qaData.filter(q => q.diff === filter);
+  list.innerHTML = filtered.map((item, i) => `
+    <div class="qa-item" id="qa-${i}">
+      <div class="qa-q" onclick="toggleQA(${i})">
+        <span class="qa-num">Q${String(i+1).padStart(2,'0')}</span>
+        <span class="qa-q-text">${item.q}</span>
+        <span class="qa-diff diff-${item.diff}">${item.diff === 'easy' ? 'Easy' : item.diff === 'med' ? 'Medium' : 'Advanced'}</span>
+        <span class="qa-toggle"><i class="fas fa-plus"></i></span>
+      </div>
+      <div class="qa-a">${item.a}</div>
+    </div>
+  `).join('');
+}
+renderQA();
+
+function toggleQA(i) {
+  const el = document.getElementById('qa-'+i);
+  el.classList.toggle('open');
+}
+
+function filterQA(type, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderQA(type);
+}
+
+// ─── TABS ───
+function switchTab(name) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  event.target.classList.add('active');
+}
+
+// ─── COPY ───
+function copyCode(btn) {
+  const block = btn.closest('.code-card').querySelector('.code-block');
+  const text = block.innerText;
+  navigator.clipboard.writeText(text).then(() => showToast('Code copied to clipboard!'));
+}
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  document.getElementById('toast-msg').textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// ─── MOBILE MENU ───
+function toggleMenu() {
+  document.getElementById('mobile-menu').classList.toggle('open');
+}
+
+// ─── SCROLL PROGRESS ───
+window.addEventListener('scroll', () => {
+  const scrollTop = document.documentElement.scrollTop;
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  const progress = (scrollTop / docHeight) * 100;
+  document.getElementById('scroll-progress').style.width = progress + '%';
+});
+
+// ─── SCROLL REVEAL ───
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 60);
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// ─── SEND MESSAGE ───
+function sendMessage() {
+  const name = document.getElementById('fm-name').value.trim();
+  const phone = document.getElementById('fm-phone').value.trim();
+  const topic = document.getElementById('fm-topic').value;
+  const msg = document.getElementById('fm-msg').value.trim();
+  if (!name || !msg) { showToast('Please fill name and message!'); return; }
+  const text = `Hello Ram Sir! 👋%0AName: ${name}%0APhone: ${phone}%0ATopic: ${topic}%0AMessage: ${msg}`;
+  window.open(`https://wa.me/919753528324?text=${text}`, '_blank');
+}
+
+// ─── BACKGROUND ANIMATION ───
+const canvas = document.getElementById('bg-canvas');
+const ctx = canvas.getContext('2d');
+let W, H, particles = [], codeChars = '01{}<>()APIGETPOSTRESTjsonhttpdata'.split('');
+
+function resize() {
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+
+class Particle {
+  constructor() { this.reset(); }
+  reset() {
+    this.x = Math.random() * W;
+    this.y = Math.random() * H;
+    this.char = codeChars[Math.floor(Math.random() * codeChars.length)];
+    this.speed = 0.3 + Math.random() * 0.7;
+    this.opacity = 0.03 + Math.random() * 0.08;
+    this.size = 9 + Math.random() * 5;
+    this.color = Math.random() > 0.6 ? '#6c63ff' : Math.random() > 0.5 ? '#00d4ff' : '#00ff88';
+  }
+  update() {
+    this.y -= this.speed;
+    if (this.y < -20) this.reset(), this.y = H + 10;
+  }
+  draw() {
+    ctx.save();
+    ctx.globalAlpha = this.opacity;
+    ctx.fillStyle = this.color;
+    ctx.font = `${this.size}px 'JetBrains Mono', monospace`;
+    ctx.fillText(this.char, this.x, this.y);
+    ctx.restore();
+  }
+}
+
+for (let i = 0; i < 80; i++) particles.push(new Particle());
+
+function animate() {
+  ctx.clearRect(0, 0, W, H);
+  particles.forEach(p => { p.update(); p.draw(); });
+  requestAnimationFrame(animate);
+}
+animate();
+</script>
+</body>
+</html>
